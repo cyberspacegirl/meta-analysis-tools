@@ -1,9 +1,11 @@
-from selenium.webdriver import Firefox
+import os
+import time
+
 from extractor.savefullpage import save_fullpage_screenshot
-import os, time
+from selenium.webdriver import Firefox
 
 
-def ActionChains(browser):
+def actionchains():
     pass
 
 
@@ -24,26 +26,31 @@ class CochraneReviewsExtractor:
         # To find information about article
         if self.table_name == "Reviews":
             self.article_title_xpath = './div[@class=\'search-results-item-body\']/h3[@class=\'result-title\']/a'
-            self.article_author_xpath = './div[@class=\'search-results-item-body\']/div[@class=\'search-result-authors\']/div'
+            self.article_author_xpath = ('./div[@class=\'search-results-item-body\']/div[@class=\''
+                                         'search-result-authors\']/div')
             self.article_url_xpath = './div[@class=\'search-results-item-body\']/h3[@class=\'result-title\']/a'
 
         elif self.table_name == "Trials":
             self.article_title_xpath = './div[@class=\'search-results-item-body\']/h3[@class=\'result-title\']/a'
-            self.article_author_xpath = './div[@class=\'search-results-item-body\']/div[@class=\'search-result-authors\']/div'
+            self.article_author_xpath = ('./div[@class=\'search-results-item-body\']/div[@class=\''
+                                         'search-result-authors\']/div')
             self.article_url_xpath = './div[@class=\'search-results-item-body\']/h3[@class=\'result-title\']/a'
 
         # The next button on the page
         self.nxtbtn_xpath = '//div[@class=\'pagination-next-link\']/a'
-        self.current_page_xpath = '//div[@class=\'pagination-page-links\']/ul[@class=\'pagination-page-list\']/li[@class=\'pagination-page-list-item active\']/a'
+        self.current_page_xpath = ('//div[@class=\'pagination-page-links\']/ul[@class=\'pagination-page-list\''
+                                   ']/li[@class=\'pagination-page-list-item active\']/a')
 
         # Everything the instance has gathered
         self.output = dict(titles=[], authors=[], urls=[])
+
     def _append_results_to_output(self, thispage_articles):
         self.output['titles'] += thispage_articles['titles']
         self.output['authors'] += thispage_articles['authors']
         self.output['urls'] += thispage_articles['urls']
 
-    def _set_table_name(self):
+    @staticmethod
+    def _set_table_name():
         table_names = dict(r='Reviews', t='Trials')
 
         print('\nCochrane Reviews can search several types of information.\n'
@@ -59,13 +66,13 @@ class CochraneReviewsExtractor:
 
         return table_names[table_type]
 
-    def button_click(self, browser, Keys=None):
+    def button_click(self, browser, keys=None):
         old_page = int(browser.find_element_by_xpath(self.current_page_xpath).text)
         next_btn = browser.find_element_by_xpath(self.nxtbtn_xpath)
         next_btn.click()
         time.sleep(10)
         # scroll to top of page after load
-        ActionChains(browser).key_down(Keys.CONTROL).send_keys(Keys.HOME).perform()
+        actionchains().key_down(keys.CONTROL).send_keys(keys.HOME).perform()
         time.sleep(1)
         current_page = int(browser.find_element_by_xpath(self.current_page_xpath).text)
 
@@ -75,7 +82,6 @@ class CochraneReviewsExtractor:
 
     def get_article_data(self, articles):
         results = dict(titles=[], authors=[], urls=[])
-
 
         for entry in articles:
             title_div = entry.find_element_by_xpath(self.article_title_xpath)
@@ -116,7 +122,7 @@ class ClinicalTrialsExtractor:
         self.pagination = '//div[@id=\'theDataTable_wrapper\']/div[@id=\'theDataTable_info\']'
 
         # Everything the instance has gathered
-        self.output = dict(titles=[], status=[], conditions=[], interventions=[], locations=[],  urls=[])
+        self.output = dict(titles=[], status=[], conditions=[], interventions=[], locations=[], urls=[])
 
     def _append_results_to_output(self, thispage_articles):
         self.output['titles'] += thispage_articles['titles']
@@ -142,7 +148,7 @@ class ClinicalTrialsExtractor:
             raise Exception('Attempted button click did not advance page!')
 
     def get_article_data(self, articles):
-        results = dict(titles=[], status=[], conditions=[], interventions=[], locations=[],  urls=[])
+        results = dict(titles=[], status=[], conditions=[], interventions=[], locations=[], urls=[])
 
         for entry in articles:
             title_div = entry.find_element_by_xpath(self.article_title_xpath)
@@ -223,7 +229,8 @@ class NIHreporterExtractor:
         # Everything the instance has gathered
         self.output = dict(titles=[], authors=[], urls=[], projectID=[])
 
-    def _set_table_name(self):
+    @staticmethod
+    def _set_table_name():
         table_names = dict(p='Projects', a='Publications', i='Patents', c='Clinical-Studies')
 
         print('\nNIHrePORTER can search several types of information.\n'
@@ -307,7 +314,8 @@ class PsychExtraExtractor:
 
         # To find information about article
         self.article_title_xpath = './/a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle\']'
-        self.article_title_altxpath = './/a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle truncatedEffect\']'
+        self.article_title_altxpath = ('.//a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle '
+                                       'truncatedEffect\']')
         self.article_author_xpath = './/span[@class=\'titleAuthorETC\']'
         self.article_url_xpath = './/a[@id=\'citationDocTitleLink\']'
 
@@ -351,7 +359,7 @@ class PsychExtraExtractor:
             try:
                 author_div = entry.find_element_by_xpath(self.article_author_xpath)
                 results['authors'].append(author_div.text)
-            except: # Not all grey literature has authors listed
+            except:  # Not all grey literature has authors listed
                 results['authors'].append('')
 
             url_div = entry.find_element_by_xpath(self.article_url_xpath)
@@ -373,7 +381,8 @@ class PsychInfoExtractor:
 
         # To find information about article
         self.article_title_xpath = './/a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle\']'
-        self.article_title_altxpath = './/a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle truncatedEffect\']'
+        self.article_title_altxpath = ('.//a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle '
+                                       'truncatedEffect\']')
         self.article_author_xpath = './/span[@class=\'titleAuthorETC\']'
         self.article_url_xpath = './/a[@id=\'citationDocTitleLink\']'
 
@@ -436,7 +445,8 @@ class ProQuestExtractor:
 
         # To find information about article
         self.article_title_xpath = './/a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle\']'
-        self.article_title_altxpath = './/a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle truncatedEffect\']'
+        self.article_title_altxpath = ('.//a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle '
+                                       'truncatedEffect\']')
         self.article_author_xpath = './/span[@class=\'titleAuthorETC\']'
         self.article_url_xpath = './/a[@id=\'citationDocTitleLink\']'
 
@@ -505,7 +515,8 @@ class PubMedExtractor:
 
         # The next button on the page
         self.nxtbtn_xpath = '//div[@class=\'pagination\']/a[text()=\'Next >\']'
-        self.current_page_xpath = '//div[@class=\'title_and_pager bottom\']/div[@class=\'pagination\']/h3[@class=\'page\']/input'
+        self.current_page_xpath = ('//div[@class=\'title_and_pager bottom\']/div[@class=\'pagination\']/h3[@class=\''
+                                   'page\']/input')
 
         # Everything the instance has gathered
         self.output = dict(titles=[], authors=[], details=[], urls=[])

@@ -1,7 +1,10 @@
 # This program is written by Megan Finnegan.
 # Updates contributed by Sola Adeyiga
+import csv
+import os
+import time
+
 from extractor import titleextractor as te
-import csv, os, time
 
 # Currently supported search engines
 engine_names = dict(g="GoogleScholar", p="Pubmed", q="ProquestDisseration",
@@ -20,7 +23,7 @@ print("To get started, please tell me what search engine you\'re scraping info f
 while True:
     search_engine = input("[g] Google Scholar, [p] Pubmed, [q] Proquest Dissertations, \n"
                           "[s] PsychInfo, [x] PsychExtra, [n] NIH rePORTER, \n"
-						  "[c] ClinicalTrial.gov, [r] Cochrane Reviews: ").lower()
+                          "[c] ClinicalTrial.gov, [r] Cochrane Reviews: ").lower()
 
     if search_engine in ["g", "p", "q", "s", "x", "n", "c", "r"]:
         break
@@ -40,14 +43,17 @@ print("\nOk, the next step is to run what ever search you want results for.\n"
 
 # Extra Instructions
 if search_engine == "n":
-    print("\nFor NIH RePORTER you also need to make sure that you are on the \"" + title_extractor.extractor.table_name + "\" tab.\n")
+    print(
+        "\nFor NIH RePORTER you also need to make sure that you are on the \"" + title_extractor.extractor.table_name +
+        "\" tab.\n")
 if search_engine == "c":
     print("\nFor ClinicalTrials.gov I can only scrape the default settings right now.\n"
           "Please make sure that you don\'t hide these columns and that you stay in the list view tab.\n"
           "If you find you need to scrape more information than this, please make a feature request.\n")
 if search_engine == "r":
-    print("\nFor Coachrane Library you also need to make sure that you are on the \"" + title_extractor.extractor.table_name + "\" tab.\n")
-
+    print(
+        "\nFor Coachrane Library you also need to make sure that you are on the \"" +
+        title_extractor.extractor.table_name + "\" tab.\n")
 
 input("Press enter when the first page is loaded and I\'ll try scraping the results.")
 
@@ -58,20 +64,18 @@ keywords = input('\nGreat! Well, I think I\'ve gotten all I can here.\n'
                  'a descriptive name for this search so I can make a folder.\n'
                  'Generally telling me the keywords you used is the most helpful: ')
 
-
-
 # Saving results to file
 results_fldr = './searchResults-' + time.strftime("%Y%m%d")
 if not os.path.exists(results_fldr):
     os.makedirs(results_fldr)
-
 
 # Naming the file
 if search_engine in ["n", "r"]:
     csv_file = results_fldr + '/' + engine_names[search_engine] + '-' + title_extractor.extractor.table_name \
                + '-all-titles-' + "-".join(keywords.split(' ')) + '.csv'
 else:
-    csv_file = results_fldr + '/' + engine_names[search_engine] + '-all-titles-' + "-".join(keywords.split(' ')) + '.csv'
+    csv_file = results_fldr + '/' + engine_names[search_engine] + '-all-titles-' + "-".join(
+        keywords.split(' ')) + '.csv'
 csv_columns = list(search_results.keys())
 
 try:
@@ -85,4 +89,3 @@ try:
           '\nThanks for using!\n')
 except IOError:
     print("I/O error")
-

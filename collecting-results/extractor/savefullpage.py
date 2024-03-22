@@ -1,5 +1,6 @@
 import math
 
+
 def save_fullpage_screenshot(driver, output_path):
     """
     Scroll down a page taking screen shots.

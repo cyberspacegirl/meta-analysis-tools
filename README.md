@@ -30,10 +30,10 @@ A tool that takes a folder of plain text files and generates a simple word frequ
 
 ### Collecting Results
 Description TK.
-pip install extractor
 Turned Action chains to function
 Created keys parameter
 Corrected raise value error to supported form
+Added method find_elements_by_xpath() to class WebDriver
 
 ### Removing Duplicates
 Description TK.
