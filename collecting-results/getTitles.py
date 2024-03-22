@@ -1,4 +1,5 @@
 # This program is written by Megan Finnegan.
+# Updates contributed by Sola Adeyiga
 from extractor import titleextractor as te
 import csv, os, time
 

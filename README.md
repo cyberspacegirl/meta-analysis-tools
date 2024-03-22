@@ -8,7 +8,7 @@ Code originally developed in Python 3.5. Project is in the process of being upda
 ## Prerequisites, Dependencies, and Version Notes
 1. Requires the gecko driver to be installed on system path. Gecko version TK was used in the creation of these scripts.
 
-2. These scripts were developed and tested using Python 3.11.5 running on Ubuntu 20.04.6 LTS.
+2. These scripts were developed and tested using Python 3.12.1 running on Ubuntu 20.04.6 LTS.
 
 3. A requirements.txt file has been included for installing needed Python package dependencies. See Getting started section below for how to use this.
 
@@ -30,6 +30,10 @@ A tool that takes a folder of plain text files and generates a simple word frequ
 
 ### Collecting Results
 Description TK.
+pip install extractor
+Turned Action chains to function
+Created keys parameter
+Corrected raise value error to supported form
 
 ### Removing Duplicates
 Description TK.

@@ -3,6 +3,10 @@ from extractor.savefullpage import save_fullpage_screenshot
 import os, time
 
 
+def ActionChains(browser):
+    pass
+
+
 class CochraneReviewsExtractor:
     def __init__(self):
         # Cochrane can search several types of info, this specifies which
@@ -55,7 +59,7 @@ class CochraneReviewsExtractor:
 
         return table_names[table_type]
 
-    def button_click(self, browser):
+    def button_click(self, browser, Keys=None):
         old_page = int(browser.find_element_by_xpath(self.current_page_xpath).text)
         next_btn = browser.find_element_by_xpath(self.nxtbtn_xpath)
         next_btn.click()
