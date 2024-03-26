@@ -677,7 +677,7 @@ class TitleExtractor:
 
         nxtbtn = True
         while nxtbtn:
-            # first take a screen shot just in case we need to go back and visually inspect the search results
+            # first take a screenshot just in case we need to go back and visually inspect the search results
             self._take_screen_shot()
 
             # results automatically recorded in the extractor class output field
