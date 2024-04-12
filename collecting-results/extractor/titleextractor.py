@@ -3,7 +3,7 @@ import time
 
 from extractor.savefullpage import save_fullpage_screenshot
 from selenium.webdriver import Firefox
-
+from selenium.webdriver.common.by import By
 
 def actionchains():
     pass
