@@ -5,9 +5,6 @@ from extractor.savefullpage import save_fullpage_screenshot
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 
-def actionchains():
-    pass
-
 
 class CochraneReviewsExtractor:
     def __init__(self):
@@ -444,12 +441,9 @@ class ProQuestExtractor:
         self.article_xpath = '//ul[@class=\'resultItems\']/li[@class=\'resultItem ltr\']'
 
         # To find information about article
-        self.article_title_xpath = './/a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle\']'
-        self.article_title_altxpath = ('.//a[@id=\'citationDocTitleLink\']/div[@class=\'truncatedResultsTitle '
-                                       'truncatedEffect\']')
-        self.article_author_xpath = './/span[@class=\'titleAuthorETC\']'
-        self.article_url_xpath = './/a[@id=\'citationDocTitleLink\']'
-
+        self.article_title_xpath = './/div[@class=\'resultHeader\']//h3/a'
+        self.article_author_xpath = './/span[@class=\'truncatedAuthor\']'
+        self.article_url_xpath = './/li[contains(@class, \'search-results-badge\')]/a'
         # The next button on the page
         self.nxtbtn_xpath = '//nav/ul[@class=\'pagination\']/li/a'
 
@@ -480,20 +474,16 @@ class ProQuestExtractor:
         results = dict(titles=[], authors=[], urls=[])
 
         for entry in articles:
-            try:
-                title_div = entry.find_element_by_xpath(self.article_title_xpath)
-                results['titles'].append(title_div.text)
-            except:  # handling long titles
-                title_div = entry.find_element_by_xpath(self.article_title_altxpath)
-                results['titles'].append(title_div.text)
+            title_div = entry.find_element(By.XPATH, self.article_title_xpath)
+            results['titles'].append(title_div.text)
 
-            author_div = entry.find_element_by_xpath(self.article_author_xpath)
+            author_div = entry.find_element(By.XPATH, self.article_author_xpath)
             results['authors'].append(author_div.text)
 
-            url_div = entry.find_element_by_xpath(self.article_url_xpath)
+            url_div = entry.find_element(By.XPATH, self.article_url_xpath)
             results['urls'].append(url_div.get_attribute('href'))
 
-        self._append_results_to_output(results)
+            self._append_results_to_output(results)
 
 
 class PubMedExtractor:
@@ -657,7 +647,7 @@ class TitleExtractor:
             self.extractor = CochraneReviewsExtractor()
 
     def _extract_data_from_page(self):
-        articles = self.browser.find_elements_by_xpath(self.extractor.article_xpath)
+        articles = self.browser.find_elements(By.XPATH, self.extractor.article_xpath)
 
         self.extractor.get_article_data(articles)
 
