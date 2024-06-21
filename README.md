@@ -38,4 +38,4 @@ Added method find_elements_by_xpath() to class WebDriver
 ### Removing Duplicates
 Description TK.
 
-THIS IS THE CHANGE!
+THIS IS THE CHANGE
