@@ -7,7 +7,7 @@ import time
 from extractor import titleextractor as te
 
 # Currently supported search engines
-engine_names = dict(g="GoogleScholar", p="Pubmed", q="ProquestDisseration",
+engine_names = dict(g="GoogleScholar", p="Pubmed", q="ProquestBasicSearch",
                     s="PsychInfo", x="PsychExtra", n="NIHrePORTER",
                     c="ClinicalTrialsGov", r="CochraneReviews")
 

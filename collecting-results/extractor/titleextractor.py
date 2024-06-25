@@ -628,7 +628,7 @@ class TitleExtractor:
             self.browser.get("https://www.ncbi.nlm.nih.gov/pubmed/")
             self.extractor = PubMedExtractor()
         elif search_engine == "q":
-            self.browser.get("https://search.proquest.com/dissertations/index")
+            self.browser.get("https://www.proquest.com/?accountid=14553")
             self.extractor = ProQuestExtractor()
         elif search_engine == "s":
             self.browser.get("https://search.proquest.com/psycinfo/advanced?accountid=14553")
