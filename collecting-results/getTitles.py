@@ -65,7 +65,7 @@ keywords = input('\nGreat! Well, I think I\'ve gotten all I can here.\n'
                  'Generally telling me the keywords you used is the most helpful: ')
 
 # Saving results to file
-results_fldr = './searchResults-' + time.strftime("%Y%m%d")
+results_fldr = './search-results-' + time.strftime("%Y%m%d")
 if not os.path.exists(results_fldr):
     os.makedirs(results_fldr)
 

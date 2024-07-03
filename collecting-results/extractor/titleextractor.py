@@ -432,7 +432,7 @@ class PsychInfoExtractor:
 class ProQuestExtractor:
     def __init__(self):
         # Needed for screenshots
-        image_fldr = './ProQuest-screenshots-taken-on-' + time.strftime("%Y%m%d-%H%M%S")
+        image_fldr = './search-results-' + time.strftime("%Y%m%d")
         if not os.path.exists(image_fldr):
             os.makedirs(image_fldr)
         self.screenshot_folder = image_fldr
