@@ -432,7 +432,9 @@ class PsychInfoExtractor:
 class ProQuestExtractor:
     def __init__(self):
         # Needed for screenshots
+        base_fldr = 'data'
         image_fldr = './search-results-' + time.strftime("%Y%m%d")
+        #image_fldr = os.path.join(base_fldr, './search-results-' + time.strftime("%Y%m%d"))
         if not os.path.exists(image_fldr):
             os.makedirs(image_fldr)
         self.screenshot_folder = image_fldr
@@ -458,10 +460,11 @@ class ProQuestExtractor:
     def button_click(self, browser):
         old_page = browser.current_url
         # for some reason text() in xpath is not working so doing it this way.
-        next_btn = browser.find_elements_by_xpath(self.nxtbtn_xpath)
-        next_btn = next_btn[-1]
-        if next_btn.text == 'Next page':
-            next_btn.click()
+        next_btn = browser.find_element(By.XPATH, '//*[@id="updateForm"]/nav/ul/li[9]/a')
+        #next_btn = next_btn[-1]
+        #if next_btn.text == 'Next Page':
+        next_btn.click()
+            #next_btn.click()
         time.sleep(2)
 
         current_page = browser.current_url

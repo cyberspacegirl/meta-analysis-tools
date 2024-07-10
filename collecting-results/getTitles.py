@@ -7,7 +7,7 @@ import time
 from extractor import titleextractor as te
 
 # Currently supported search engines
-engine_names = dict(g="GoogleScholar", p="Pubmed", q="ProquestBasicSearch",
+engine_names = dict(g="GoogleScholar", p="Pubmed", q="Proquest",
                     s="PsychInfo", x="PsychExtra", n="NIHrePORTER",
                     c="ClinicalTrialsGov", r="CochraneReviews")
 
@@ -21,7 +21,7 @@ print("Hello! This is a very crude version of a webscraper built to help \n"
 # Gathering info about what the user wants to search.
 print("To get started, please tell me what search engine you\'re scraping info from today.")
 while True:
-    search_engine = input("[g] Google Scholar, [p] Pubmed, [q] Proquest Dissertations, \n"
+    search_engine = input("[g] Google Scholar, [p] Pubmed, [q] Proquest, \n"
                           "[s] PsychInfo, [x] PsychExtra, [n] NIH rePORTER, \n"
                           "[c] ClinicalTrial.gov, [r] Cochrane Reviews: ").lower()
 
