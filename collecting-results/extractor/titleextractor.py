@@ -430,11 +430,10 @@ class PsychInfoExtractor:
 
 
 class ProQuestExtractor:
-    def __init__(self):
+    def __init__(self, screenshot_path):
         # Needed for screenshots
-        base_fldr = 'data'
-        image_fldr = './search-results-' + time.strftime("%Y%m%d")
-        #image_fldr = os.path.join(base_fldr, './search-results-' + time.strftime("%Y%m%d"))
+        image_fldr = screenshot_path + '/ProQuest-screenshots-' \
+                     + time.strftime("%Y%m%d") + '-' + time.strftime("%H%M%S")
         if not os.path.exists(image_fldr):
             os.makedirs(image_fldr)
         self.screenshot_folder = image_fldr
@@ -447,7 +446,7 @@ class ProQuestExtractor:
         self.article_author_xpath = './/span[@class=\'truncatedAuthor\']'
         self.article_url_xpath = './/li[contains(@class, \'search-results-badge\')]/a'
         # The next button on the page
-        self.nxtbtn_xpath = '//nav/ul[@class=\'pagination\']/li/a'
+        self.nxtbtn_xpath = '//nav/ul[@class=\'pagination\']/li/a[@title=\'Next Page\']'
 
         # Everything the instance has gathered
         self.output = dict(titles=[], authors=[], urls=[])
@@ -459,13 +458,15 @@ class ProQuestExtractor:
 
     def button_click(self, browser):
         old_page = browser.current_url
-        # for some reason text() in xpath is not working so doing it this way.
-        next_btn = browser.find_element(By.XPATH, '//*[@id="updateForm"]/nav/ul/li[9]/a')
-        #next_btn = next_btn[-1]
-        #if next_btn.text == 'Next Page':
+
+        # This will fail when we reached the last page
+        try:
+            next_btn = browser.find_element(By.XPATH, self.nxtbtn_xpath)
+        except:
+            raise Exception('Unable to find button to advance page!')
+
         next_btn.click()
-            #next_btn.click()
-        time.sleep(2)
+        time.sleep(10)  # TODO: Create formal check for page load instead of pause (@heuristicwondering)
 
         current_page = browser.current_url
 
@@ -480,13 +481,17 @@ class ProQuestExtractor:
             title_div = entry.find_element(By.XPATH, self.article_title_xpath)
             results['titles'].append(title_div.text)
 
-            author_div = entry.find_element(By.XPATH, self.article_author_xpath)
-            results['authors'].append(author_div.text)
+            try:
+                author_div = entry.find_element(By.XPATH, self.article_author_xpath)
+                results['authors'].append(author_div.text)
+            except:
+                # Book entries do not always have authors listed
+                results['authors'].append('author not found')
 
             url_div = entry.find_element(By.XPATH, self.article_url_xpath)
             results['urls'].append(url_div.get_attribute('href'))
 
-            self._append_results_to_output(results)
+        self._append_results_to_output(results)
 
 
 class PubMedExtractor:
@@ -623,6 +628,11 @@ class TitleExtractor:
         self.browser = Firefox()
         self.currentpage = 1
 
+        # Creating folder to save screenshots
+        screenshots_fldr = '../data/search-screenshots-' + time.strftime('%Y%m%d')
+        if not os.path.exists(screenshots_fldr):
+            os.makedirs(screenshots_fldr)
+
         # defining things that are specific to the search engine
         if search_engine == "g":
             self.browser.get("https://scholar.google.com/")
@@ -632,7 +642,7 @@ class TitleExtractor:
             self.extractor = PubMedExtractor()
         elif search_engine == "q":
             self.browser.get("https://www.proquest.com/?accountid=14553")
-            self.extractor = ProQuestExtractor()
+            self.extractor = ProQuestExtractor(screenshots_fldr)
         elif search_engine == "s":
             self.browser.get("https://search.proquest.com/psycinfo/advanced?accountid=14553")
             self.extractor = PsychInfoExtractor()
