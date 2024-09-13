@@ -4,6 +4,9 @@ import time
 from extractor.savefullpage import save_fullpage_screenshot
 from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium import webdriver
 
 
 class CochraneReviewsExtractor:
@@ -439,7 +442,7 @@ class ProQuestExtractor:
         self.screenshot_folder = image_fldr
 
         # All elements that contain article information
-        self.article_xpath = '//ul[@class=\'resultItems\']/li[@class=\'resultItem ltr\']'
+        self.article_xpath = '//li[contains(@class, \'resultItem\')]'
 
         # To find information about article
         self.article_title_xpath = './/div[@class=\'resultHeader\']//h3/a'
@@ -660,8 +663,15 @@ class TitleExtractor:
             self.extractor = CochraneReviewsExtractor()
 
     def _extract_data_from_page(self):
-        articles = self.browser.find_elements(By.XPATH, self.extractor.article_xpath)
-
+        try:
+            articles = WebDriverWait(self.browser, 10).until(
+                EC.presence_of_all_elements_located((By.XPATH, self.extractor.article_xpath))
+            )
+            print(f"Found {len(articles)} articles")  # Debugging: check how many articles were found
+        except Exception as e:
+            print(f"Error while locating articles: {e}")
+            return
+        # articles = self.browser.find_elements(By.XPATH, self.extractor.article_xpath)
         self.extractor.get_article_data(articles)
 
     def _try_clicking(self):
