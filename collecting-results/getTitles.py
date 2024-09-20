@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # This program is written by Megan Finnegan.
 # Updates contributed by Sola Adeyiga
 import csv
